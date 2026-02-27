@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&family=Manrope:wght@200..800&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="./orbit.css">
+  <link rel="stylesheet" href="./cycle-widget.css">
 </head>
 
 <body>
@@ -128,11 +129,13 @@
       <p>Each cycle begins with thoughtful reflection. These prompts help you define what truly matters, so every step
         that follows is intentional and aligned.</p>
     </div>
-    <div class="prompt-widget reveal">
-      <h3>This Starts With You</h3>
-      <p>Each phase will ask you to pause and respond with intention. What you write here becomes the foundation for
-        your progress.</p>
-      <button class="btn btn-sm">Proceed Mindfully</button>
+    <div class="cycle-widget-wrap reveal">
+      <div class="cw-progress-track">
+        <div class="cw-progress-bar" id="cycle-progress"></div>
+      </div>
+      <div id="cycle-widget">
+        <div id="cycle-inner"></div>
+      </div>
     </div>
   </section>
 
@@ -152,6 +155,7 @@
   </section>
 
   <script src="./orbit.js"></script>
+  <script src="./cycle-widget.js"></script>
 
 </body>
 

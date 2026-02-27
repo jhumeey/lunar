@@ -579,6 +579,7 @@ nav svg {
 @media (max-width: 1024px) {
   .hero {
     padding: 200px 60px 80px;
+
   }
 
   .hero-content {
@@ -621,6 +622,7 @@ nav svg {
   .hero {
     padding: 160px 32px 60px;
     align-items: flex-start;
+    height: auto;
   }
 
   .hero-content {
