@@ -20,6 +20,7 @@
   --neutral-10: #f5f7fa;
   --neutral-20: #dadada;
   --neutral-30: #132634;
+  --white: #fff;
 }
 
 html {
@@ -99,8 +100,17 @@ nav svg {
   pointer-events: none;
   will-change: transform;
   transition: transform 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: starDrift 60s linear infinite;
 }
 
+@keyframes starDrift {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-40px);
+  }
+}
 .star {
   z-index: 1;
   position: absolute;
@@ -359,8 +369,7 @@ nav svg {
 
 .phase-card {
   width: 36.875rem;
-  height: 37.75rem;
-  padding: 0 2.5rem;
+  padding-left: 2.5rem;
   padding-bottom: 3rem;
   background: var(--neutral-30);
   border-radius: 4px;
@@ -514,7 +523,7 @@ nav svg {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 2;
+  z-index: 1;
   line-height: 0;
 }
 
@@ -579,11 +588,10 @@ nav svg {
 @media (max-width: 1024px) {
   .hero {
     padding: 200px 60px 80px;
-
   }
 
   .hero-content {
-    width: 75%;
+    width: 60%;
   }
 
   .hero p {
@@ -639,11 +647,15 @@ nav svg {
   }
 
   .moon-texture {
-    width: 240px;
-    height: 240px;
-    right: -40px;
-    top: 12%;
+    width: clamp(100px, 60vw, 500px);
+    height: clamp(100px, 60vw, 500px);
+    right: 10px;
+    top: unset;
+    bottom: 0%;
     opacity: 0.45;
+    margin: 0 auto;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   .closure {
@@ -753,10 +765,6 @@ nav svg {
 
   .hero p {
     font-size: 1rem;
-  }
-
-  .moon-texture {
-    display: none;
   }
 
   .closure {

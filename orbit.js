@@ -1,38 +1,52 @@
 // ── STARS ──
 const starsEl = document.getElementById("stars");
-for (let i = 0; i < 120; i++) {
+
+for (let i = 0; i < 220; i++) {
   const s = document.createElement("div");
   s.className = "star";
-  const size = Math.random() * 2.5 + 0.5;
+  let size;
+  if (Math.random() > 0.92) {
+    size = Math.random() * 3 + 2; // rare larger stars
+  } else {
+    size = Math.random() * 2 + 0.5;
+  }
   s.style.cssText = `
     width:${size}px; height:${size}px;
     top:${Math.random() * 100}%;
     left:${Math.random() * 100}%;
     --d:${(Math.random() * 5 + 3).toFixed(1)}s;
     --delay:${(Math.random() * 6).toFixed(1)}s;
-    --op:${(Math.random() * 0.5 + 0.3).toFixed(2)};
+    --op:${(Math.random() * 0.7 + 0.2).toFixed(2)};
   `;
   starsEl.appendChild(s);
 }
 
 // ── PARALLAX MOUSE TRACKING ──
-// Only runs on non-touch devices
+// ── PARALLAX (Mouse + Scroll Combined) ──
+const hero = document.querySelector(".hero");
+const moon = document.querySelector(".moon-texture");
+const heroContent = document.querySelector(".hero-content");
+const heroBg = document.querySelector(".hero-bg");
+
+let mouseX = 0,
+  mouseY = 0;
+let currentX = 0,
+  currentY = 0;
+
+let scrollTarget = 0;
+let currentScroll = 0;
+
+let rafId = null;
+
+function lerp(a, b, t) {
+  return a + (b - a) * t;
+}
+
+// Detect touch
 const isTouchDevice = () => window.matchMedia("(hover: none)").matches;
 
+// ── Mouse movement (desktop only)
 if (!isTouchDevice()) {
-  const hero = document.querySelector(".hero");
-  const moon = document.querySelector(".moon-texture");
-  const heroContent = document.querySelector(".hero-content");
-  const heroBg = document.querySelector(".hero-bg");
-
-  let mouseX = 0, mouseY = 0;
-  let currentX = 0, currentY = 0;
-  let rafId = null;
-
-  function lerp(a, b, t) {
-    return a + (b - a) * t;
-  }
-
   hero.addEventListener("mousemove", (e) => {
     const rect = hero.getBoundingClientRect();
     mouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
@@ -44,24 +58,52 @@ if (!isTouchDevice()) {
     mouseX = 0;
     mouseY = 0;
   });
+}
 
-  function animateParallax() {
-    rafId = null;
+// ── Scroll depth (all devices)
+window.addEventListener("scroll", () => {
+  scrollTarget = window.scrollY;
+  if (!rafId) rafId = requestAnimationFrame(animateParallax);
+});
 
-    currentX = lerp(currentX, mouseX, 0.06);
-    currentY = lerp(currentY, mouseY, 0.06);
+function animateParallax() {
+  rafId = null;
 
-    moon.style.transform         = `translate(${currentX * -28}px, ${currentY * -18}px)`;
-    starsEl.style.transform      = `translate(${currentX * -14}px, ${currentY * -10}px)`;
-    heroBg.style.transform       = `translate(${currentX * -6}px,  ${currentY * -4}px)`;
-    heroContent.style.transform  = `translate(${currentX * 6}px,   ${currentY * 4}px)`;
+  // Smooth mouse
+  currentX = lerp(currentX, mouseX, 0.06);
+  currentY = lerp(currentY, mouseY, 0.06);
 
-    if (
-      Math.abs(currentX - mouseX) > 0.001 ||
-      Math.abs(currentY - mouseY) > 0.001
-    ) {
-      rafId = requestAnimationFrame(animateParallax);
-    }
+  // Smooth scroll
+  currentScroll = lerp(currentScroll, scrollTarget, 0.08);
+
+  // Combine scroll + mouse movement
+  const scrollDepthMoon = currentScroll * 0.18;
+  const scrollDepthStars = currentScroll * 0.12;
+  const scrollDepthBg = currentScroll * 0.06;
+  const scrollDepthContent = currentScroll * 0.08;
+
+//   moon.style.transform = `
+//   translate(${currentX * -45}px, ${currentY * -30 + scrollDepthMoon}px)
+// `;
+
+  starsEl.style.transform = `
+  translate(${currentX * -22}px, ${currentY * -16 + scrollDepthStars}px)
+`;
+
+  heroBg.style.transform = `
+  translate(${currentX * -10}px, ${currentY * -6 + scrollDepthBg}px)
+`;
+
+  heroContent.style.transform = `
+  translate(${currentX * 12}px, ${currentY * 8 + scrollDepthContent}px)
+`;
+
+  if (
+    Math.abs(currentX - mouseX) > 0.001 ||
+    Math.abs(currentY - mouseY) > 0.001 ||
+    Math.abs(currentScroll - scrollTarget) > 0.5
+  ) {
+    rafId = requestAnimationFrame(animateParallax);
   }
 }
 
@@ -76,6 +118,6 @@ const observer = new IntersectionObserver(
       }
     });
   },
-  { threshold: 0.12 }
+  { threshold: 0.12 },
 );
 reveals.forEach((r) => observer.observe(r));

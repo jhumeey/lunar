@@ -1,0 +1,14 @@
+{
+  "name": "Orbyt",
+  "short_name": "Orbyt",
+  "description": "Finish What You Start",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0e1a24",
+  "theme_color": "#0e1a24",
+  "icons": [
+    { "src": "./images/favicon-32.png",  "sizes": "32x32",   "type": "image/png" },
+    { "src": "./images/favicon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "./images/favicon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
