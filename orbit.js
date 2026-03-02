@@ -1,19 +1,19 @@
-if (!sessionStorage.getItem("lunarPlayed")) {
-  document.body.classList.add("loading");
-} else {
-  const loader = document.getElementById("lunarLoader");
-  if (loader) loader.remove();
+// if (!sessionStorage.getItem("lunarPlayed")) {
+//   document.body.classList.add("loading");
+// } else {
+//   const loader = document.getElementById("lunarLoader");
+//   if (loader) loader.remove();
 
-  const hero = document.querySelector(".hero");
-  hero.style.opacity = "1";
-  hero.style.transform = "translateY(0)";
-}
+//   const hero = document.querySelector(".hero");
+//   hero.style.opacity = "1";
+//   hero.style.transform = "translateY(0)";
+// }
+
+document.body.classList.add("loading");
 
 const svg = document.getElementById("horseSVG");
 const stage = document.querySelector(".loader-stage");
 const svgRect = svg.getBoundingClientRect();
-const scaleX = svgRect.width / 825;
-const scaleY = svgRect.height / 738;
 
 const paths = svg.querySelectorAll("path");
 const dots = [];
@@ -28,8 +28,8 @@ paths.forEach((path) => {
   dot.className = "constellation-dot";
 
   // Save final position
-  dot.dataset.x = centerX * scaleX;
-  dot.dataset.y = centerY * scaleY;
+  dot.dataset.rawX = centerX;
+  dot.dataset.rawY = centerY;
 
   // Start scattered randomly
   dot.style.transform = `
@@ -53,14 +53,15 @@ const totalFormationTime =
 svg.style.opacity = "0";
 
 function formHorse() {
+  const scaleX = svgRect.width / 825;
+  const scaleY = svgRect.height / 738;
   dots.forEach((dot, i) => {
     setTimeout(() => {
-      dot.style.transition = "transform 2.2s cubic-bezier(0.22, 1, 0.36, 1)";
+      const finalX = dot.dataset.rawX * scaleX;
+      const finalY = dot.dataset.rawY * scaleY;
 
-      dot.style.transform = `
-        translate(${dot.dataset.x}px, ${dot.dataset.y}px)
-      `;
-    }, i * 6); // small stagger ripple
+      dot.style.transform = `translate(${finalX}px, ${finalY}px)`;
+    }, i * STAGGER);
   });
 }
 
@@ -185,7 +186,7 @@ function animateParallax() {
   const scrollDepthBg = currentScroll * 0.06;
   const scrollDepthContent = currentScroll * 0.08;
 
-   moon.style.transform = `
+  moon.style.transform = `
   translate(${currentX * -45}px, ${currentY * -30 + scrollDepthMoon}px)`;
 
   starsEl.style.transform = `
