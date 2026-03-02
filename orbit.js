@@ -1,3 +1,96 @@
+document.body.classList.add("loading");
+
+const svg = document.getElementById("horseSVG");
+const stage = document.querySelector(".loader-stage");
+const svgRect = svg.getBoundingClientRect();
+const scaleX = svgRect.width / 825;
+const scaleY = svgRect.height / 738;
+
+const paths = svg.querySelectorAll("path");
+const dots = [];
+
+paths.forEach((path) => {
+  const bbox = path.getBBox();
+
+  const centerX = bbox.x + bbox.width / 2;
+  const centerY = bbox.y + bbox.height / 2;
+
+  const dot = document.createElement("div");
+  dot.className = "constellation-dot";
+
+  // Save final position
+  dot.dataset.x = centerX * scaleX;
+  dot.dataset.y = centerY * scaleY;
+
+  // Start scattered randomly
+  dot.style.transform = `
+    translate(
+      ${Math.random() * 600 - 300}px,
+      ${Math.random() * 400 - 200}px
+    )
+  `;
+
+  stage.appendChild(dot);
+  dots.push(dot);
+});
+
+const STAGGER = 6;
+const TRANSITION_DURATION = 2200; // 2.2s
+const START_DELAY = 300;
+
+const totalFormationTime =
+  START_DELAY + dots.length * STAGGER + TRANSITION_DURATION;
+
+svg.style.opacity = "0";
+
+function formHorse() {
+  dots.forEach((dot, i) => {
+    setTimeout(() => {
+      dot.style.transition = "transform 2.2s cubic-bezier(0.22, 1, 0.36, 1)";
+
+      dot.style.transform = `
+        translate(${dot.dataset.x}px, ${dot.dataset.y}px)
+      `;
+    }, i * 6); // small stagger ripple
+  });
+}
+
+window.addEventListener("load", () => {
+  setTimeout(formHorse, START_DELAY);
+
+  // Glow pulse AFTER formation completes
+  setTimeout(() => {
+    dots.forEach((dot) => {
+      dot.style.boxShadow = "0 0 12px rgba(230,196,122,0.9)";
+    });
+  }, totalFormationTime - 600);
+
+  setTimeout(() => {
+    dots.forEach((dot) => {
+      dot.style.boxShadow = "0 0 4px rgba(230,196,122,0.3)";
+    });
+  }, totalFormationTime);
+
+  // Hero fade in AFTER full settle
+  setTimeout(() => {
+    const hero = document.querySelector(".hero");
+    hero.style.opacity = "1";
+    hero.style.transform = "translateY(0)";
+  }, totalFormationTime + 200);
+
+  // Fade loader after hero begins
+  setTimeout(() => {
+    const loader = document.getElementById("lunarLoader");
+    loader.style.transition = "opacity 0.5s ease-out";
+    loader.style.opacity = "0";
+
+    setTimeout(() => {
+      loader.remove();
+      document.body.classList.remove("loading");
+    }, 500);
+  }, totalFormationTime + 600);
+});
+
 // ── STARS ──
 const starsEl = document.getElementById("stars");
 
@@ -82,9 +175,9 @@ function animateParallax() {
   const scrollDepthBg = currentScroll * 0.06;
   const scrollDepthContent = currentScroll * 0.08;
 
-//   moon.style.transform = `
-//   translate(${currentX * -45}px, ${currentY * -30 + scrollDepthMoon}px)
-// `;
+  //   moon.style.transform = `
+  //   translate(${currentX * -45}px, ${currentY * -30 + scrollDepthMoon}px)
+  // `;
 
   starsEl.style.transform = `
   translate(${currentX * -22}px, ${currentY * -16 + scrollDepthStars}px)

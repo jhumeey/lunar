@@ -27,6 +27,53 @@ html {
   scroll-behavior: smooth;
 }
 
+body.loading {
+  overflow: hidden;
+}
+
+/* loader  */
+
+#horseSVG {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.lunar-loader {
+  position: fixed;
+  inset: 0;
+  background: #0e1a24;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loader-stage {
+  position: relative;
+  height: 738px;
+  width: 900px;
+  margin: 0 auto;
+}
+
+.constellation-dot {
+  position: absolute;
+  z-index: 2;
+  width: 3px;
+  height: 3px;
+  background: #fff;
+  border-radius: 50%;
+  opacity: 0.8;
+  transition:
+    transform 2.2s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 1s ease;
+}
+
+/* ─────────────────────────────────────────
+   BASE STYLES
+───────────────────────────────────────── */
+
 body {
   background: var(--night);
   color: var(--neutral-10);
@@ -66,6 +113,12 @@ nav svg {
   align-items: flex-start;
   padding: 300px 100px 80px;
   overflow: hidden;
+
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
 }
 
 .hero-bg {
