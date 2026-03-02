@@ -1,0 +1,334 @@
+/* ── CYCLE SUMMARY CARD ── */
+
+/* Overlay */
+#summary-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  padding: 24px;
+}
+
+#summary-overlay.sc-visible {
+  opacity: 1;
+}
+
+.sc-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 16, 24, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Modal shell */
+.sc-modal {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 620px;
+}
+
+/* Action bar */
+.sc-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.sc-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.05);
+  color: rgba(245,247,250,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.sc-close:hover {
+  background: rgba(255,255,255,0.12);
+  color: var(--neutral-10);
+}
+
+.sc-download {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 100px;
+  border: none;
+  background: radial-gradient(circle at center, #9FB3C8 0%, #7C89B8 100%);
+  color: #F5F7FA;
+  font-family: "Manrope", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.sc-download:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.sc-download:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── THE CARD ── */
+.sc-card {
+  width: 100%;
+  background: #0e1a24;
+  border-radius: 16px;
+  padding: 36px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+/* Star field */
+.sc-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.sc-star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  animation: sc-twinkle linear infinite;
+}
+
+@keyframes sc-twinkle {
+  0%, 100% { opacity: 0.1; }
+  50%       { opacity: 0.7; }
+}
+
+/* Ambient glow */
+.sc-card::before {
+  content: "";
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(124,137,184,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.sc-card::after {
+  content: "";
+  position: absolute;
+  bottom: -60px;
+  left: -60px;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(230,196,122,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Header */
+.sc-header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.sc-header-left {
+  flex: 1;
+}
+
+.sc-eyebrow {
+  font-family: "Manrope", sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #9FB3C8;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.sc-headline {
+  font-family: "Domine", serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #F5F7FA;
+  max-width: 340px;
+}
+
+.sc-header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.sc-date {
+  font-family: "Manrope", sans-serif;
+  font-size: 0.72rem;
+  color: rgba(245,247,250,0.4);
+  text-align: right;
+}
+
+/* Divider */
+.sc-divider {
+  position: relative;
+  z-index: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(124,137,184,0.4) 0%, rgba(159,179,200,0.2) 50%, rgba(230,196,122,0.3) 100%);
+  margin-bottom: 28px;
+}
+
+/* Phases grid */
+.sc-phases {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.sc-phase {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+
+.sc-phase-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.sc-phase-num {
+  font-family: "Domine", serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  opacity: 0.6;
+}
+
+.sc-phase-label {
+  font-family: "Manrope", sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.sc-phase-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sc-entry-q {
+  font-family: "Manrope", sans-serif;
+  font-size: 0.68rem;
+  color: rgba(245,247,250,0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 2px;
+}
+
+.sc-entry-a {
+  font-family: "Manrope", sans-serif;
+  font-size: 0.82rem;
+  color: rgba(245,247,250,0.85);
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+/* Footer */
+.sc-footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.sc-footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.sc-logo-text {
+  font-family: "Domine", serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #F5F7FA;
+  letter-spacing: 0.04em;
+}
+
+.sc-tagline {
+  font-family: "Manrope", sans-serif;
+  font-size: 0.68rem;
+  color: rgba(245,247,250,0.35);
+  letter-spacing: 0.04em;
+  font-style: italic;
+}
+
+.sc-footer-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sc-footer-label {
+  font-family: "Manrope", sans-serif;
+  font-size: 0.72rem;
+  color: rgba(159,179,200,0.6);
+  letter-spacing: 0.06em;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  #summary-overlay {
+    padding: 16px;
+    align-items: flex-end;
+  }
+
+  .sc-card {
+    padding: 24px 20px;
+  }
+
+  .sc-phases {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .sc-headline {
+    font-size: 1.1rem;
+  }
+}

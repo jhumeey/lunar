@@ -238,7 +238,9 @@
 }
 
 .cw-chip--checked {
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-color: rgba(200, 215, 240, 0.5);
+  background: #1d303f;
+  color: var(--white);
 }
 
 .cw-extra-error {
@@ -347,6 +349,34 @@
 }
 
 .cw-main-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.cw-spacer {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+//* ── SUMMARY BUTTON ── */
+.cw-summary-btn {
+  background: radial-gradient(
+    circle at center,
+    rgba(159, 179, 200, 0.25) 0%,
+    rgba(124, 137, 184, 0.25) 100%
+  );
+  color: #bed4f4;
+  font-family: "Manrope", sans-serif;
+  border: 1px solid rgba(159, 179, 200, 0.3);
+  align-self: flex-end;
+  cursor: pointer;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+}
+
+.cw-summary-btn:hover {
   opacity: 0.88;
   transform: translateY(-1px);
 }

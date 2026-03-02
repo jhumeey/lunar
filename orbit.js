@@ -1,4 +1,13 @@
-document.body.classList.add("loading");
+if (!sessionStorage.getItem("lunarPlayed")) {
+  document.body.classList.add("loading");
+} else {
+  const loader = document.getElementById("lunarLoader");
+  if (loader) loader.remove();
+
+  const hero = document.querySelector(".hero");
+  hero.style.opacity = "1";
+  hero.style.transform = "translateY(0)";
+}
 
 const svg = document.getElementById("horseSVG");
 const stage = document.querySelector(".loader-stage");
@@ -85,6 +94,7 @@ window.addEventListener("load", () => {
     loader.style.opacity = "0";
 
     setTimeout(() => {
+      sessionStorage.setItem("lunarPlayed", "true");
       loader.remove();
       document.body.classList.remove("loading");
     }, 500);
@@ -175,9 +185,8 @@ function animateParallax() {
   const scrollDepthBg = currentScroll * 0.06;
   const scrollDepthContent = currentScroll * 0.08;
 
-  //   moon.style.transform = `
-  //   translate(${currentX * -45}px, ${currentY * -30 + scrollDepthMoon}px)
-  // `;
+   moon.style.transform = `
+  translate(${currentX * -45}px, ${currentY * -30 + scrollDepthMoon}px)`;
 
   starsEl.style.transform = `
   translate(${currentX * -22}px, ${currentY * -16 + scrollDepthStars}px)

@@ -708,7 +708,7 @@ nav svg {
     opacity: 0.45;
     margin: 0 auto;
     left: 50%;
-    transform: translateX(-50%);
+    translate: -50% 0;
   }
 
   .closure {

@@ -234,6 +234,38 @@ function clearError(key) {
   if (el) el.classList.remove("cw-input--error");
 }
 
+// ── KEYBOARD NAVIGATION ──
+function handleKeydown(e) {
+  const w = widgets[current];
+
+  // Cmd/Ctrl + Enter → proceed to next step from anywhere
+  if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+    e.preventDefault();
+    next();
+    return;
+  }
+
+  // Tab → move between textareas, Cmd/Ctrl+Enter on last one advances
+  if (e.key === "Tab" && w.type === "questions") {
+    const inputs = [...document.querySelectorAll(".cw-input")];
+    const current_focus = document.activeElement;
+    const idx = inputs.indexOf(current_focus);
+
+    if (idx === inputs.length - 1 && !e.shiftKey) {
+      // On last field, Tab does nothing extra — Cmd+Enter to proceed
+      return;
+    }
+  }
+}
+
+// Auto-focus first input on each step
+function focusFirst() {
+  const first = document.querySelector(".cw-input");
+  if (first) {
+    setTimeout(() => first.focus(), 300); // after slide animation settles
+  }
+}
+
 // ── RENDER ──
 function render() {
   const w = widgets[current];
@@ -294,7 +326,7 @@ function render() {
                 id="field-${f.key}"
                 class="cw-input"
                 rows="2"
-                placeholder="Write here…"
+                placeholder="${f.placeholder || "Write here…"}"
                 oninput="clearError('${f.key}')"
               >${saved}</textarea>
             </div>
@@ -372,25 +404,25 @@ function render() {
     html = `
       <div class="cw-content-wrapper">
         <div class="cw-frosted-layer">
-          <div class="cw-completion-icon">
-            <svg viewBox="0 0 48 48" fill="none">
-              <circle cx="24" cy="24" r="20" stroke="rgba(140,200,160,0.5)" stroke-width="1.5"/>
-              <path d="M14 24 L21 31 L34 17" stroke="rgba(160,220,180,0.9)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
           <div class="cw-gradient-inner">
             <div class="cw-fields-bg">
               <h3 class="cw-ack-title">${w.content.title}</h3>
               <p class="cw-body" style="margin-bottom:0">${w.content.body}</p>
             </div>
           </div>
-          <button class="btn cw-main-btn" onclick="beginAgain()">${w.content.button}</button>
+          <div class="cw-spacer">
+            <button class="btn cw-main-btn" onclick="beginAgain()">${w.content.button}</button>
+            <button class="btn cw-summary-btn" onclick="generateSummaryCard()">View My Summary</button>
+          </div>
+          
         </div>
       </div>`;
   }
 
   inner.innerHTML = html;
+  focusFirst();
 }
 
 // ── INIT ──
+document.addEventListener("keydown", handleKeydown);
 render();
